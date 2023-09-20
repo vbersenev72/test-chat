@@ -62,7 +62,7 @@ async function Start() {
                         text: data.message,
                         date: new Date().getTime()
                     })
-                    chat.overwrite({ messages: chatMessages }).save()
+                    chat.overwrite({ name: chat.name, messages: chatMessages }).save()
 
                     console.log(`Сообщение отправлено в комнату ${data.chat}: ${data.message}`);
                 } catch (error) {
