@@ -4,11 +4,12 @@ import ChatModel from "../models/Chat.model.js"
 class ChatController {
     async create(req, res) {
         try {
-            const {type} = req.body
+            const {name} = req.body
 
             const newChat = new ChatModel({
-                type: type
-            }).save()
+                name: name
+            })
+            newChat.save()
 
             return res.json({message: 'chat created', newChat})
 

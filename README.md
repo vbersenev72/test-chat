@@ -1,6 +1,6 @@
 ##### POST /api/chat/create 
 ``{
-  "type":"chat 2" 
+  "name":"chat 2" 
 }``
 
 ##### GET /api/chat
