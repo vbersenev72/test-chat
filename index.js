@@ -10,7 +10,7 @@ import ChatModel from './models/Chat.model.js';
 config()
 
 const PORT = process.env.PORT || 1488
-const db = 'mongodb+srv://vbersenev72:JCjAb3WNTww1RwbO@cluster0.gwq6yqu.mongodb.net/'
+const db = process.env.DATABASE_URL
 
 const app = express()
 app.use(cors());
