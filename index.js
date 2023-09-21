@@ -53,14 +53,18 @@ async function Start() {
             // Обработка отправки сообщения
             socket.on('sendMessage', async (data) => {
                 try {
-                    io.to(data.chat).emit('message', data.message);
+                    const date = new Date().getTime()
+                    io.to(data.chat).emit('message', {
+                        text: data.message,
+                        date: date
+                    });
 
                     const chat = await ChatModel.findById(data.chat)
 
                     const chatMessages = [...chat.messages]
                     chatMessages.push({
                         text: data.message,
-                        date: new Date().getTime()
+                        date: date
                     })
                     chat.overwrite({ name: chat.name, messages: chatMessages }).save()
 

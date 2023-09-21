@@ -6,6 +6,10 @@ class ChatController {
         try {
             const {name} = req.body
 
+            const chat = await ChatModel.findOne({name: name})
+            if (chat) return res.status(400).json({message: "chat already exists"})
+            
+
             const newChat = new ChatModel({
                 name: name
             })
