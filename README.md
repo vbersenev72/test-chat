@@ -18,3 +18,8 @@ body : {
     "chat": "_id chat",
     "message": "message to chat"
 }
+
+##### emit name : "leaveChat"
+body : {
+    "chat": "_id chat",
+}

@@ -8,7 +8,8 @@ const Chat = new Schema({
             text: String,
             date: String
         }
-    ]
+    ],
+    members:  { type: Number, default: 0 }
 })
 
 export default model('Chat', Chat)

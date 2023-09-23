@@ -6,6 +6,10 @@ import { Server } from 'socket.io';
 import chatRouter from './routes/chat.router.js';
 import http from 'http'
 import ChatModel from './models/Chat.model.js';
+import {
+    ADD_MEMBER,
+    DELETE_MEMBER
+} from './helpers/socketio.js'
 
 config()
 
@@ -41,6 +45,7 @@ async function Start() {
                         console.log(chat);
                         socket.join(data.chat);
                         console.log(`Клиент ${socket.id} присоединился к комнате ${data.chat}`);
+                        ADD_MEMBER(chat._id)
                     } else {
                         console.log('chat not defined');
                     }
@@ -73,6 +78,11 @@ async function Start() {
                     console.log(error);
                 }
             });
+
+            socket.on('leaveChat', (data) => {
+                DELETE_MEMBER(data.chat)
+                console.log(`Пользователь вышел из чата ${data.chat}`);
+            })
 
             // Обработка отключения клиента от сокета
             socket.on('disconnect', () => {
