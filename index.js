@@ -10,6 +10,8 @@ import {
     ADD_MEMBER,
     DELETE_MEMBER
 } from './helpers/socketio.js'
+import uploadRouter from './routes/upload.router.js';
+import fileUpload from 'express-fileupload';
 
 config()
 
@@ -19,7 +21,10 @@ const db = process.env.DATABASE_URL
 const app = express()
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload({}))
+app.use(express.static('uploads'))
 app.use('/api/chat', chatRouter)
+app.use('/api/upload', uploadRouter)
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -58,10 +63,13 @@ async function Start() {
             // Обработка отправки сообщения
             socket.on('sendMessage', async (data) => {
                 try {
+
                     const date = new Date().getTime()
                     io.to(data.chat).emit('message', {
                         text: data.message,
-                        date: date
+                        date: date,
+                        file: data?.file,
+                        photo: data?.photo,
                     });
 
                     const chat = await ChatModel.findById(data.chat)
@@ -69,9 +77,11 @@ async function Start() {
                     const chatMessages = [...chat.messages]
                     chatMessages.push({
                         text: data.message,
-                        date: date
+                        date: date,
+                        file: data?.file,
+                        photo: data?.photo,
                     })
-                    chat.overwrite({ name: chat.name, messages: chatMessages }).save()
+                    chat.overwrite({ name: chat.name, messages: chatMessages, members: chat.members }).save()
 
                     console.log(`Сообщение отправлено в комнату ${data.chat}: ${data.message}`);
                 } catch (error) {

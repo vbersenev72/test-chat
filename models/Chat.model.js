@@ -6,10 +6,12 @@ const Chat = new Schema({
     messages: [
         {
             text: String,
-            date: String
+            date: String,
+            file: { type: String, default: null }, // path to file
+            photo: { type: String, default: null } // path to photo
         }
     ],
-    members:  { type: Number, default: 0 }
+    members: { type: Number, default: 0 }
 })
 
 export default model('Chat', Chat)
