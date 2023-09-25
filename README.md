@@ -9,10 +9,12 @@
 
 
 
+```
 ##### POST /api/chat/create
-```{
+{
 "name":"chat 2"
-}```
+}
+```
 
 
 
