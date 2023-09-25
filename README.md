@@ -10,26 +10,24 @@
 
 
 ##### POST /api/chat/create
-{
+```{
 "name":"chat 2"
-}
+}```
 
 
 
 
 ##### POST /api/upload/file
-{
-file : (Загружаешь файл с помощью Form-data)
-}
+
+```file : (Загружаешь файл с помощью Form-data)```
 В ответ получаешь “path” - путь к файлу на сервере
 
 
 
 
 ##### POST /api/upload/photo
-{
-file : (Загружаешь фото с помощью Form-data)
-}
+
+```file : (Загружаешь фото с помощью Form-data)```
 В ответ получаешь “path” - путь к файлу на сервере
 
 
@@ -48,28 +46,24 @@ file : (Загружаешь фото с помощью Form-data)
 
 
 ##### emit name : "joinChat"
-body : {
+```body : {
 "chat": "id chat"
-}
-
-
+}```
 
 
 ##### emit name : "sendMessage"
-body : {
+```body : {
 "chat": "id chat",
 "message": "message to chat",
 “photo”: “path to photo”, // Если нет, то ничего не отправлять
 “file”: “path to file” // Если нет, то ничего не отправлять
-}
-
-
+}```
 
 
 ##### emit name : "leaveChat"
-body : {
+```body : {
 "chat": "id chat",
-}
+}```
 
 
 
