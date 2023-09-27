@@ -49,11 +49,11 @@ async function Start() {
                     if (chat) {
                         console.log(chat);
                         socket.join(data.chat);
+                        ADD_MEMBER(chat._id)
                         io.to(data.chat).emit('members', {
                             members: chat.members
                         });
                         console.log(`Клиент ${socket.id} присоединился к комнате ${data.chat}`);
-                        ADD_MEMBER(chat._id)
                     } else {
                         console.log('chat not defined');
                     }
