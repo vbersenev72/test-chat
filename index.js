@@ -73,7 +73,7 @@ async function Start() {
 
                     const date = new Date().getTime()
                     io.to(data.chat).emit('message', {
-                        text: data.message,
+                        text: data?.message,
                         date: date,
                         file: data?.file,
                         photo: data?.photo,
