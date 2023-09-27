@@ -49,10 +49,14 @@ async function Start() {
                     if (chat) {
                         console.log(chat);
                         socket.join(data.chat);
-                        ADD_MEMBER(chat._id)
+                        await ADD_MEMBER(chat._id)
+
+                        const Chat = await ChatModel.findById(data.chat)
                         io.to(data.chat).emit('members', {
-                            members: chat.members
+                            members: Chat.members
                         });
+                        console.log(`"members": ${Chat.members} `);
+
                         console.log(`Клиент ${socket.id} присоединился к комнате ${data.chat}`);
                     } else {
                         console.log('chat not defined');
@@ -92,8 +96,8 @@ async function Start() {
                 }
             });
 
-            socket.on('leaveChat', (data) => {
-                DELETE_MEMBER(data.chat)
+            socket.on('leaveChat', async (data) => {
+                await DELETE_MEMBER(data.chat)
                 console.log(`Пользователь вышел из чата ${data.chat}`);
             })
 
