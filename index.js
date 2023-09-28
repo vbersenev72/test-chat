@@ -93,7 +93,7 @@ async function Start() {
                         file: data?.file,
                         photo: data?.photo,
                     })
-                    chat.overwrite({ name: chat.name, messages: chatMessages, members: chat.members }).save()
+                    await chat.overwrite({ name: chat.name, messages: chatMessages, members: chat.members }).save()
 
                     console.log(`Сообщение отправлено в комнату ${data.chat}: ${data.message}`);
                 } catch (error) {
