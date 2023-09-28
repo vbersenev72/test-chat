@@ -102,9 +102,9 @@ async function Start() {
             });
 
             socket.on('leaveChat', async (data) => {
-                const chat = await ChatModel.findById(data.chat)
-
                 await DELETE_MEMBER(data.chat)
+                
+                const chat = await ChatModel.findById(data.chat)
                 io.to(data.chat).emit('members', {
                     members: chat.members
                 });
