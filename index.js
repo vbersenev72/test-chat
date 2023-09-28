@@ -48,6 +48,9 @@ async function Start() {
                     const chat = await ChatModel.findById(data.chat)
                     if (chat) {
                         console.log(chat);
+                        if (chat.members >= 8) {
+                            return socket.emit('error', {error: 'member count must be 0 => 8'})
+                        }
                         socket.join(data.chat);
                         await ADD_MEMBER(chat._id)
 
@@ -58,6 +61,8 @@ async function Start() {
                         console.log(`"members": ${Chat.members} `);
 
                         console.log(`Клиент ${socket.id} присоединился к комнате ${data.chat}`);
+                    } else if (Number(chat.members) > 8) {
+                        
                     } else {
                         console.log('chat not defined');
                     }
@@ -97,7 +102,13 @@ async function Start() {
             });
 
             socket.on('leaveChat', async (data) => {
+                const chat = await ChatModel.findById(data.chat)
+
                 await DELETE_MEMBER(data.chat)
+                io.to(data.chat).emit('members', {
+                    members: chat.members
+                });
+
                 console.log(`Пользователь вышел из чата ${data.chat}`);
             })
 
