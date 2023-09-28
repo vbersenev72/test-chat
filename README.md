@@ -17,6 +17,23 @@
 ```
 
 
+```
+##### POST /api/chat/message/edit
+{
+	"date": "1695210169428", // Дата сообщения (timeshtamp)
+	"text": "Новый текст",
+	"chatId": "650ad8e5f34045c4ab3bb4d8"
+}
+```
+
+
+```
+##### POST /api/chat/message/delete
+{
+	"date": "1695210169428", // Дата сообщения (timeshtamp)
+	"chatId": "650ad8e5f34045c4ab3bb4d8"
+}
+```
 
 
 ```
@@ -39,7 +56,9 @@ file : (Загружаешь фото с помощью Form-data)
 ##### GET /api/chat
 ```
 
-
+```
+##### GET /api/chat/{id} // _id чата
+```
 
 
 
