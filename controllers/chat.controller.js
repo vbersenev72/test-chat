@@ -91,7 +91,7 @@ class ChatController {
                 }
             })
 
-            await chat.overwrite({name: chat.name, messages: messages, members: chat.members}).save()
+            await ChatModel.findByIdAndUpdate(chatId, {$set: {messages: messages}})
 
             res.json({message: 'message edit succesfully'})
 
@@ -112,7 +112,7 @@ class ChatController {
             let messages = chat.messages
             messages = messages.filter(message => message.date !== date)
 
-            await chat.overwrite({name: chat.name, messages: messages, members: chat.members}).save()
+            await ChatModel.findByIdAndUpdate(chatId, {$set: {messages: messages}})
             res.json({message: 'message delete succesully'})
 
         } catch (error) {

@@ -93,7 +93,7 @@ async function Start() {
                         file: data?.file,
                         photo: data?.photo,
                     })
-                    await chat.overwrite({ name: chat.name, messages: chatMessages, members: chat.members }).save()
+                    await ChatModel.findByIdAndUpdate(data.chat, {$set: {messages: chatMessages}})
 
                     console.log(`Сообщение отправлено в комнату ${data.chat}: ${data.message}`);
                 } catch (error) {
