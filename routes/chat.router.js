@@ -8,6 +8,7 @@ const chatRouter = new Router()
 chatRouter.post('/create', ChatController.create)
 chatRouter.get('/', ChatController.get),
 chatRouter.get('/:id', ChatController.getOne),
+chatRouter.delete('/', chatController.deleteChat)
 chatRouter.post('/message/edit', chatController.editMessage)
 chatRouter.post('/message/delete', chatController.deleteMessage)
 chatRouter.post('/pin', chatController.pinChat)

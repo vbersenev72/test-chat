@@ -101,6 +101,19 @@ class ChatController {
         }
     }
 
+    async deleteChat(req, res) {
+        try {
+            const { chatId } = req.body
+            
+            await ChatModel.deleteOne({_id: chatId})
+            
+            res.json({message: 'chat deleted succesfully'})
+        
+        } catch (error) {
+            res.status(400).json({message: 'error', error: error})
+        }
+    }
+
     async deleteMessage(req, res) {
         try {
             
