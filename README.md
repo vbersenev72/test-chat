@@ -35,6 +35,20 @@
 }
 ```
 
+```
+##### POST /api/chat/pin
+{
+	"chatId": "650ad8e5f34045c4ab3bb4d8"
+}
+```
+
+```
+##### POST /api/chat/unpin
+{
+	"chatId": "650ad8e5f34045c4ab3bb4d8"
+}
+```
+
 
 ```
 ##### POST /api/upload/file
