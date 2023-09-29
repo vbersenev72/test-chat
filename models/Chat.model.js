@@ -11,7 +11,8 @@ const Chat = new Schema({
             photo: { type: String, default: null } // path to photo
         }
     ],
-    members: { type: Number, default: 0 }
+    members: { type: Number, default: 0 },
+    isPinned: {type : Boolean, default: false}
 })
 
 export default model('Chat', Chat)

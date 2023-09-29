@@ -22,6 +22,36 @@ class ChatController {
         }
     }
 
+    async pinChat(req, res) {
+        try {
+            
+            const { chatId } = req.body
+            const chat = await ChatModel.findById(chatId)
+            if (!chat) return res.status(400).json({message: "chat not defined"})
+
+            await ChatModel.findByIdAndUpdate(chatId, {$set: {isPinned: true}})
+            return res.json({message: 'chat pinned succesfully'})
+
+        } catch (error) {
+            return res.status(400).json({message: 'error '+ error})
+        }
+    }
+
+    async unpinChat(req, res) {
+        try {
+            
+            const { chatId } = req.body
+            const chat = await ChatModel.findById(chatId)
+            if (!chat) return res.status(400).json({message: "chat not defined"})
+
+            await ChatModel.findByIdAndUpdate(chatId, {$set: {isPinned: false}})
+            return res.json({message: 'chat unpinned succesfully'})
+
+        } catch (error) {
+            return res.status(400).json({message: 'error '+ error})
+        }
+    }
+
     async get(req, res) {
         try {
             const Chats = await ChatModel.find({})
