@@ -16,7 +16,6 @@
 }
 ```
 
-
 ```
 ##### POST /api/chat/message/edit
 {
@@ -25,7 +24,6 @@
 	"chatId": "650ad8e5f34045c4ab3bb4d8"
 }
 ```
-
 
 ```
 ##### POST /api/chat/message/delete
@@ -49,7 +47,6 @@
 }
 ```
 
-
 ```
 ##### POST /api/upload/file
 
@@ -57,14 +54,12 @@ file : (Загружаешь файл с помощью Form-data)
 В ответ получаешь “path” - путь к файлу на сервере
 ```
 
-
 ```
 ##### POST /api/upload/photo
 
 file : (Загружаешь фото с помощью Form-data)
 В ответ получаешь “path” - путь к файлу на сервере
 ```
-
 
 ```
 ##### GET /api/chat
@@ -74,6 +69,21 @@ file : (Загружаешь фото с помощью Form-data)
 ##### GET /api/chat/{id} // _id чата
 ```
 
+```
+##### POST /api/user/create
+{
+	"username": "username",
+	"role": "anything role",
+	"name": "name"
+}
+```
+
+```
+##### POST /api/user/delete
+{
+	"username": "username",
+}
+```
 
 
 
@@ -87,7 +97,8 @@ file : (Загружаешь фото с помощью Form-data)
 ##### emit name : "joinChat"
 
 body : {
-"chat": "id chat"
+"chat": "_id chat",
+"user": "_id user"
 }
 ```
 
@@ -97,8 +108,17 @@ body : {
 body : {
 "chat": "id chat",
 "message": "message to chat",
-“photo”: “path to photo”, // Если нет, то ничего не отправлять
-“file”: “path to file” // Если нет, то ничего не отправлять
+“photo”: [“path to photo1”, “path to photo2”, ...], // Если нет, то ничего не отправлять
+“file”: [“path to file1”, ...], // Если нет, то ничего не отправлять
+"user": "user _id"
+}
+```
+
+```
+##### emit name : "readMessage"
+body : {
+"chat": "_id chat",
+"messages": ["1695920250028", ...] Перечисляешь сообщения которые прочитаны
 }
 ```
 
@@ -106,6 +126,7 @@ body : {
 ##### emit name : "leaveChat"
 body : {
 "chat": "id chat",
+"user": "_id user"
 }
 ```
 

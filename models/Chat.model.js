@@ -7,12 +7,15 @@ const Chat = new Schema({
         {
             text: String,
             date: String,
-            file: { type: String, default: null }, // path to file
-            photo: { type: String, default: null } // path to photo
+            file: { type: Array, default: null }, // path to file
+            photo: { type: Array, default: null }, // path to photo,
+            isRead: { type: Boolean, default: false },
+            user: { type: String, default: null },
         }
     ],
     members: { type: Number, default: 0 },
-    isPinned: {type : Boolean, default: false}
+    isPinned: { type: Boolean, default: false },
+    users: { type: Array, default: null }
 })
 
 export default model('Chat', Chat)

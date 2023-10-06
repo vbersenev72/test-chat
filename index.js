@@ -3,14 +3,14 @@ import { config } from 'dotenv'
 import cors from "cors";
 import mongoose from 'mongoose';
 import { Server } from 'socket.io';
-import chatRouter from './routes/chat.router.js';
+import router from './routes/index.js';
 import http from 'http'
 import ChatModel from './models/Chat.model.js';
 import {
     ADD_MEMBER,
     DELETE_MEMBER
 } from './helpers/socketio.js'
-import uploadRouter from './routes/upload.router.js';
+
 import fileUpload from 'express-fileupload';
 
 config()
@@ -23,8 +23,7 @@ app.use(cors());
 app.use(express.json());
 app.use(fileUpload({}))
 app.use(express.static('uploads'))
-app.use('/api/chat', chatRouter)
-app.use('/api/upload', uploadRouter)
+app.use('/api', router)
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -49,20 +48,21 @@ async function Start() {
                     if (chat) {
                         console.log(chat);
                         if (chat.members >= 8) {
-                            return socket.emit('error', {error: 'member count must be 0 => 8'})
+                            return socket.emit('error', { error: 'member count must be 0 => 8' })
                         }
                         socket.join(data.chat);
-                        await ADD_MEMBER(chat._id)
+                        await ADD_MEMBER(chat._id, data.user)
 
                         const Chat = await ChatModel.findById(data.chat)
                         io.to(data.chat).emit('members', {
-                            members: Chat.members
+                            members: Chat.members,
+                            users: Chat.users
                         });
-                        console.log(`"members": ${Chat.members} `);
+                        console.log(`"members": ${Chat.members} \n\n ${Chat.users}`);
 
                         console.log(`Клиент ${socket.id} присоединился к комнате ${data.chat}`);
                     } else if (Number(chat.members) > 8) {
-                        
+
                     } else {
                         console.log('chat not defined');
                     }
@@ -75,38 +75,61 @@ async function Start() {
             // Обработка отправки сообщения
             socket.on('sendMessage', async (data) => {
                 try {
+                    const { message, file, photo, user, chat } = data
 
                     const date = new Date().getTime()
-                    io.to(data.chat).emit('message', {
-                        text: data?.message,
+                    io.to(chat).emit('message', {
+                        text: message,
                         date: date,
-                        file: data?.file,
-                        photo: data?.photo,
+                        file: file,
+                        photo: photo,
+                        user: user // _id user
                     });
 
-                    const chat = await ChatModel.findById(data.chat)
 
-                    const chatMessages = [...chat.messages]
+                    const Chat = await ChatModel.findById(chat)
+
+                    const chatMessages = [...Chat.messages]
                     chatMessages.push({
-                        text: data.message,
+                        text: message,
                         date: date,
-                        file: data?.file,
-                        photo: data?.photo,
+                        file: file,
+                        photo: photo,
+                        user: user // _id user
                     })
-                    await ChatModel.findByIdAndUpdate(data.chat, {$set: {messages: chatMessages}})
+                    await ChatModel.findByIdAndUpdate(chat, { $set: { messages: chatMessages } })
 
-                    console.log(`Сообщение отправлено в комнату ${data.chat}: ${data.message}`);
+                    console.log(`Сообщение отправлено в комнату ${chat}: ${message}`);
                 } catch (error) {
                     console.log(error);
                 }
             });
 
+            socket.on('readMessage', async (data) => {
+                const { chat, messages } = data // Получаем _id чата и массив с сообщениями (в качестве идентификатора сообщений мы используем timeshtamp)
+
+                const Chat = await ChatModel.findById(chat)
+
+                let copyMessages = Chat.messages
+                copyMessages.forEach((message) => {
+                    messages.forEach((msg) => {
+                        if (message.date === msg) {
+                            message.isRead = true
+                        }
+                    })
+                })
+
+                await ChatModel.findByIdAndUpdate(chat, { $set: { messages: copyMessages } })
+
+            })
+
             socket.on('leaveChat', async (data) => {
-                await DELETE_MEMBER(data.chat)
-                
+                await DELETE_MEMBER(data.chat, data.user)
+
                 const chat = await ChatModel.findById(data.chat)
                 io.to(data.chat).emit('members', {
-                    members: chat.members
+                    members: chat.members,
+                    users: chat.users
                 });
 
                 console.log(`Пользователь вышел из чата ${data.chat}`);
