@@ -31,11 +31,26 @@ class UserController {
         }
     }
 
-    async addAvatar(req, res) {
+    async getOne(req, res) {
         try {
+            const {id} = req.params.id
+
+            const user = await UserModel.findById(id)
+            res.json({message: user})
+
+        } catch (error) {
+            res.status(400).json({message: 'get user error', error})
+        }
+    }
+
+    async getAll(req, res) {
+        try {
+
+            const users = await UserModel.find({})
+            res.json({message: users})
             
         } catch (error) {
-            
+            res.status(400).json({message: 'get users error', error})
         }
     }
 }

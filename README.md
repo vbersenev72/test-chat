@@ -85,6 +85,13 @@ file : (Загружаешь фото с помощью Form-data)
 }
 ```
 
+```
+##### GET /api/user/{id} // _id user
+```
+
+```
+##### GET /api/user/
+```
 
 
 
