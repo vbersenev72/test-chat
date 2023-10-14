@@ -122,9 +122,11 @@ async function Start() {
                 await ChatModel.findByIdAndUpdate(chat, { $set: { messages: copyMessages } })
 
                 Chat = await ChatModel.findById(chat)
-                io.to(data.chat).emit('members', {
+                
+                io.to(data.chat).emit('messages', {
                     members: Chat.members,
-                    users: Chat.users
+                    users: Chat.users,
+                    messages: Chat.messages
                 });
 
             })
