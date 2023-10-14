@@ -53,6 +53,52 @@ class UserController {
             res.status(400).json({message: 'get users error', error})
         }
     }
+
+    async pinChat(req, res) {
+        try {
+            
+            const { chatId, userId } = req.body
+
+            const chat = await ChatModel.findById(chatId)
+            const user = await UserModel.findById(userId)
+
+            if (!chat) return res.status(400).json({message: "chat not defined"})
+            if (!user) return res.status(400).json({message: "user not defined"})
+
+            let pinnedChats = user.pinnedChats
+            pinnedChats.push(chatId)
+
+            await UserModel.findByIdAndUpdate(userId, {$set: {pinnedChats: pinnedChats}})
+
+            return res.json({message: 'chat pinned succesfully'})
+
+        } catch (error) {
+            return res.status(400).json({message: 'error '+ error})
+        }
+    }
+
+    async unpinChat(req, res) {
+        try {
+            
+            const { chatId, userId } = req.body
+
+            const chat = await ChatModel.findById(chatId)
+            const user = await UserModel.findById(userId)
+
+            if (!chat) return res.status(400).json({message: "chat not defined"})
+            if (!user) return res.status(400).json({message: "user not defined"})
+
+            let pinnedChats = user.pinnedChats
+            pinnedChats.filter((chat) => chat != chatId)
+
+            await UserModel.findByIdAndUpdate(userId, {$set: {pinnedChats: pinnedChats}})
+
+            return res.json({message: 'chat pinned succesfully'})
+
+        } catch (error) {
+            return res.status(400).json({message: 'error '+ error})
+        }
+    }
 }
 
 export default new UserController()

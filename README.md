@@ -34,16 +34,18 @@
 ```
 
 ```
-##### POST /api/chat/pin
+##### POST /api/user/pin
 {
-	"chatId": "650ad8e5f34045c4ab3bb4d8"
+	"chatId": "_id chat",
+	"userId": "_id user"
 }
 ```
 
 ```
-##### POST /api/chat/unpin
+##### POST /api/user/unpin
 {
-	"chatId": "650ad8e5f34045c4ab3bb4d8"
+	"chatId": "_id chat",
+	"userId": "_id user"
 }
 ```
 

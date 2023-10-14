@@ -11,7 +11,6 @@ chatRouter.get('/:id', ChatController.getOne),
 chatRouter.delete('/', chatController.deleteChat)
 chatRouter.post('/message/edit', chatController.editMessage)
 chatRouter.post('/message/delete', chatController.deleteMessage)
-chatRouter.post('/pin', chatController.pinChat)
-chatRouter.post('/unpin', chatController.unpinChat)
+
 
 export default chatRouter
