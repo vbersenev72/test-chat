@@ -1,4 +1,5 @@
 import UserModel from "../models/User.model.js"
+import ChatModel from "../models/Chat.model.js"
 
 class UserController {
     async create(req, res) {
