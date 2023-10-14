@@ -108,7 +108,7 @@ async function Start() {
             socket.on('readMessage', async (data) => {
                 const { chat, messages } = data // Получаем _id чата и массив с сообщениями (в качестве идентификатора сообщений мы используем timeshtamp)
 
-                const Chat = await ChatModel.findById(chat)
+                let Chat = await ChatModel.findById(chat)
 
                 let copyMessages = Chat.messages
                 copyMessages.forEach((message) => {
@@ -120,6 +120,12 @@ async function Start() {
                 })
 
                 await ChatModel.findByIdAndUpdate(chat, { $set: { messages: copyMessages } })
+
+                Chat = await ChatModel.findById(chat)
+                io.to(data.chat).emit('members', {
+                    members: Chat.members,
+                    users: Chat.users
+                });
 
             })
 
