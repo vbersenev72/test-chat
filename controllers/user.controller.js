@@ -33,7 +33,7 @@ class UserController {
 
     async getOne(req, res) {
         try {
-            const {id} = req.params.id
+            const id = req.params.id
 
             const user = await UserModel.findById(id)
             return res.json({message: user})
