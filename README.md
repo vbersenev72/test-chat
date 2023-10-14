@@ -137,6 +137,20 @@ body : {
 }
 ```
 
+### Listeners socket.io
+
+"messages" :
+{
+	members: Chat.members,
+	users: Chat.users,
+	messages: Chat.messages
+}
+
+"error" :
+{
+	error: error
+}
+
 
 
 
