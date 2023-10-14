@@ -36,7 +36,7 @@ class UserController {
             const {id} = req.params.id
 
             const user = await UserModel.findById(id)
-            res.json({message: user})
+            return res.json({message: user})
 
         } catch (error) {
             res.status(400).json({message: 'get user error', error})
