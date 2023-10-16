@@ -4,16 +4,19 @@ import ChatModel from "../models/Chat.model.js"
 class ChatController {
     async create(req, res) {
         try {
-            const {name} = req.body
+            const {name, type} = req.body
+
+            console.log(type)
 
             const chat = await ChatModel.findOne({name: name})
             if (chat) return res.status(400).json({message: "chat already exists"})
             
 
             const newChat = new ChatModel({
-                name: name
+                name: name,
+                type: type,
             })
-            newChat.save()
+            await newChat.save()
 
             return res.json({message: 'chat created', newChat})
 

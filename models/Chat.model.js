@@ -3,6 +3,7 @@ import { Schema, model } from "mongoose"
 
 const Chat = new Schema({
     name: String,
+    type: String,
     messages: [
         {
             text: String,
