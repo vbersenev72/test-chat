@@ -20,13 +20,13 @@ class UserController {
     async delete(req, res) {
         try {
             const {username} = req.body
-
+            console.log(username)
             const candidate = await UserModel.findOne({username: username})
-            if (candidate) return res.status(400).json({message: 'user already exists'})
 
-            const user = await UserModel.create({username, role})
-            return res.json({message: 'user created', user})
-            
+            if (!candidate) return res.status(400).json({message: 'user NOT exists'})
+            const user = await UserModel.findByIdAndDelete(candidate)
+            return res.json({message: 'user delete', user})
+
         } catch (error) {
             res.status(400).json({message: 'delete error', error})
         }

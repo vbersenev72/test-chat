@@ -27,7 +27,7 @@ export async function DELETE_MEMBER(chatId, userId) {
         if (Number(chat.members) <= 0) return
         
         let users = chat.users
-        users = users.filter(user => user._id != User._id)
+        users = users.filter(user => !user._id.equals(userId))
         await ChatModel.findByIdAndUpdate(chatId, {$set: {users: users}})
         
         return await ChatModel.findByIdAndUpdate(chatId, {$set: {members: Number(chat.members - 1)}})
