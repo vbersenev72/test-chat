@@ -51,14 +51,14 @@ async function Start() {
                             return socket.emit('error', { error: 'member count must be 0 => 8' })
                         }
                         socket.join(data.chat);
-                        await ADD_MEMBER(chat._id, data.user)
+                        const newChatInfo = await ADD_MEMBER(chat._id, data.user)
 
-                        const Chat = await ChatModel.findById(data.chat)
+                        // const Chat = await ChatModel.findById(data.chat)
                         io.to(data.chat).emit('members', {
-                            members: Chat.members,
-                            users: Chat.users
+                            members: newChatInfo.members,
+                            users: newChatInfo.users
                         });
-                        console.log(`"members": ${Chat.members} \n\n ${Chat.users}`);
+                        console.log(`"members": ${newChatInfo.members} \n\n ${newChatInfo.users}`);
 
                         console.log(`Клиент ${socket.id} присоединился к комнате ${data.chat}`);
                     } else if (Number(chat.members) > 8) {
@@ -108,7 +108,7 @@ async function Start() {
             socket.on('readMessage', async (data) => {
                 const { chat, messages } = data // Получаем _id чата и массив с сообщениями (в качестве идентификатора сообщений мы используем timeshtamp)
 
-                const Chat = await ChatModel.findById(chat)
+                let Chat = await ChatModel.findById(chat)
 
                 let copyMessages = Chat.messages
                 copyMessages.forEach((message) => {
@@ -121,18 +121,25 @@ async function Start() {
 
                 await ChatModel.findByIdAndUpdate(chat, { $set: { messages: copyMessages } })
 
+                Chat = await ChatModel.findById(chat)
+                
+                io.to(data.chat).emit('messages', {
+                    members: Chat.members,
+                    users: Chat.users,
+                    messages: Chat.messages
+                });
+
             })
 
             socket.on('leaveChat', async (data) => {
-                await DELETE_MEMBER(data.chat, data.user)
+                const newChatInfo = await DELETE_MEMBER(data.chat, data.user)
 
-                const chat = await ChatModel.findById(data.chat)
                 io.to(data.chat).emit('members', {
-                    members: chat.members,
-                    users: chat.users
+                    members: newChatInfo?.members || 0,
+                    users:  newChatInfo?.users
                 });
 
-                console.log(`Пользователь вышел из чата ${data.chat}`);
+                console.log(`Пользователь ${data.user} вышел из чата ${data.chat}`);
             })
 
             // Обработка отключения клиента от сокета
