@@ -89,8 +89,7 @@ class UserController {
             if (!chat) return res.status(400).json({message: "chat not defined"})
             if (!user) return res.status(400).json({message: "user not defined"})
 
-            let pinnedChats = user.pinnedChats
-            pinnedChats.filter((chat) => chat != chatId)
+            let pinnedChats = user.pinnedChats.filter((chat) => chat != chatId)
 
             await UserModel.findByIdAndUpdate(userId, {$set: {pinnedChats: pinnedChats}})
 

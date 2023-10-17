@@ -6,11 +6,7 @@ const User = new Schema({
     username: String,
     avatar: String,
     role: String,
-    pinnedChats: [
-        {
-            chat: String
-        }
-    ]
+    pinnedChats: [String]
 })
 
 export default model('User', User)
